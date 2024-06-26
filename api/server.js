@@ -1,7 +1,7 @@
 const express = require('express');
 const chalk = require('chalk');
 const mongoose = require('mongoose');
-const { getTests } = require('./tests.controllers');
+const { getTests } = require('./controllers/tests.controllers');
 
 const PORT = 3000;
 const app = express();

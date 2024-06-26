@@ -1,19 +1,40 @@
-import styles from './Main.modules.css';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { TestItem } from './components';
+import { getTestHistories } from '../../shared/lib/utils';
+import { ProgressBar } from '../../shared/components';
+import styles from './Main.module.css';
+
+const Empty = () => {
+	return <div className={styles.empty}>Вы ещё ни разу не проходили тестирование!</div>;
+};
 
 export const Main = ({ tests }) => {
+	const histories = getTestHistories();
+
 	return (
-		<div className="main">
-			<h1>История прохождений</h1>
+		<div className={styles.container}>
+			<p>Список тестов</p>
 			<ul>
-				{tests.map((test) => (
-					<li key={test._id}>
-						<p>Дата: {new Date(test.date).toLocaleDateString('ru-RU')}</p>
-						<p>Общее количество вопросов: {test.totalQuestions}</p>
-						<p>Количество верных ответов: {test.correctAnswers}</p>
-					</li>
+				{tests.map(({ id, title }) => (
+					<TestItem key={id} id={id} title={title} />
 				))}
+			</ul>
+			<p>История прохождений</p>
+			<ul>
+				{histories.length > 0 ? (
+					histories.map(
+						({ id, title, date, correctAnswers, totalQuestions }) => (
+							<ProgressBar
+								key={id}
+								title={title}
+								date={date}
+								correctAnswers={correctAnswers}
+								totalQuestions={totalQuestions}
+							/>
+						),
+					)
+				) : (
+					<Empty />
+				)}
 			</ul>
 		</div>
 	);
