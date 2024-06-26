@@ -1,0 +1,18 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	width: 540px;
+}
+
+.form {
+	padding: 10px;
+	margin: 20px 0;
+	border: 1px solid #d0d0d0;
+	border-radius: 6px;
+}
+
+.buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}

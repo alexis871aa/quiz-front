@@ -4,6 +4,7 @@
 	margin: 10px 0;
 	padding: 15px 0;
 	height: 30px;
+	width: 600px;
 	font-size: 12px;
 	border: 1px solid #000;
 	border-radius: 4px;
@@ -11,6 +12,7 @@
 }
 
 .info {
+	width: 80px;
 	margin: 0 0 0 10px;
 	white-space: nowrap;
 	color: #000;
@@ -37,7 +39,7 @@
 }
 
 .progressBar {
-	width: 100%;
+	width: 155px;
 	height: 12px;
 	background-color: #e0e0e0;
 	border-radius: 10px;

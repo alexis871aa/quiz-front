@@ -10,7 +10,7 @@ export const TestItem = ({ id, title }) => {
 	};
 
 	const onEditClick = ({ target }) => {
-		console.log('onEditClick');
+		navigate(`/tests/${id}/edit`);
 	};
 
 	return (

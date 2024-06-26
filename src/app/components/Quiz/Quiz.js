@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import axios from 'axios';
-import { Error, Main, Test } from '../../../pages';
+import { Error, Main, Test, TestEdit } from '../../../pages';
 import { transformTests } from '../../../shared/lib/transformers';
 import styles from './Quiz.module.css';
 
@@ -36,6 +36,7 @@ export const Quiz = () => {
 					}
 				/>
 				<Route path="/tests/:id" element={<Test tests={tests} />} />
+				<Route path="/tests/:id/edit" element={<TestEdit tests={tests} />} />
 				<Route
 					path="/test/not-found"
 					element={<Error>Ошибка, такой страницы не существует!</Error>}
