@@ -9,7 +9,7 @@ async function getTests() {
 async function updateTest(id, updatedTest) {
 	try {
 		return await Test.findByIdAndUpdate(id, updatedTest, {
-			new: true,
+			new: false,
 		});
 	} catch (error) {
 		throw new Error('Произошла ошибка обновления теста: ' + error.message);

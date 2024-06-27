@@ -44,12 +44,25 @@ export const TestEdit = ({ tests, onSaveTest }) => {
 		event.preventDefault();
 
 		try {
-			console.log('TestEdit - test', test);
-			const response = await axios.put(`/api/tests/${id}`, test);
+			const transformedTest = ({ id, title, questions }) => ({
+				_id: id,
+				title,
+				questions: questions.map(({ id, question, options, correctAnswers }) => ({
+					_id: id,
+					question,
+					options,
+					correct_answer: correctAnswers,
+				})),
+			});
+
+			console.log('TEST EDIT - transformedTest, до запроса', transformedTest(test));
+			const response = await axios.put(`/api/tests/${id}`, transformedTest(test));
+			console.log('TEST EDIT - response после запроса', response.data);
 
 			onSaveTest(response.data);
 			navigate('/');
 		} catch (error) {
+			console.log(error);
 			setError('Ошибка сохранения теста!');
 		}
 	};

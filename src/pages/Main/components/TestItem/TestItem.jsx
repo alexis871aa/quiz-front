@@ -17,10 +17,10 @@ export const TestItem = ({ id, title }) => {
 		<div className={styles.container}>
 			<span className={styles.title}>{title}</span>
 			<div className={styles.buttons}>
-				<Button id={id} onClick={onStartClick}>
+				<Button id={id} height="40px" margin="auto 3px" onClick={onStartClick}>
 					Запустить
 				</Button>
-				<Button id={id} onClick={onEditClick}>
+				<Button id={id} height="40px" margin="auto 3px" onClick={onEditClick}>
 					Редактировать
 				</Button>
 			</div>
