@@ -22,6 +22,26 @@ export const Quiz = () => {
 		fetchTests().finally(() => setIsLoading(false));
 	}, []);
 
+	const handleSaveTest = async (updatedTest) => {
+		console.log('Quiz -id', updatedTest);
+		try {
+			// const transformedTest = {
+			// 	...updatedTest,
+			// 	correct_answer: updatedTest.correctAnswer,
+			// };
+
+			const response = await axios.put(`/api/tests/${updatedTest.id}`, updatedTest);
+
+			setTests((prevTests) =>
+				prevTests.map((test) =>
+					test.id === updatedTest.id ? response.data : test,
+				),
+			);
+		} catch (error) {
+			console.error('Ошибка сохранения теста:', error);
+		}
+	};
+
 	return (
 		<div className={styles.app}>
 			<Routes>
@@ -36,7 +56,10 @@ export const Quiz = () => {
 					}
 				/>
 				<Route path="/tests/:id" element={<Test tests={tests} />} />
-				<Route path="/tests/:id/edit" element={<TestEdit tests={tests} />} />
+				<Route
+					path="/tests/:id/edit"
+					element={<TestEdit tests={tests} onSaveTest={handleSaveTest} />}
+				/>
 				<Route
 					path="/test/not-found"
 					element={<Error>Ошибка, такой страницы не существует!</Error>}

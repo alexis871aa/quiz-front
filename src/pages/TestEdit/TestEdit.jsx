@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button } from '../../shared/components';
-import { Collapsible } from './components';
+import axios from 'axios';
+import { Button, QuestionList } from '../../shared/components';
 import styles from './TestEdit.module.css';
 
-export const TestEdit = ({ tests }) => {
+export const TestEdit = ({ tests, onSaveTest }) => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const [test, setTest] = useState({});
@@ -31,18 +31,42 @@ export const TestEdit = ({ tests }) => {
 		navigate('/');
 	};
 
+	const handleUpdateQuestion = (updateQuestion) => {
+		setTest((prevTest) => ({
+			...prevTest,
+			questions: prevTest.questions.map((q) =>
+				q.id === updateQuestion.id ? updateQuestion : q,
+			),
+		}));
+	};
+
+	const handleSaveTest = async (event) => {
+		event.preventDefault();
+
+		try {
+			console.log('TestEdit - test', test);
+			const response = await axios.put(`/api/tests/${id}`, test);
+
+			onSaveTest(response.data);
+			navigate('/');
+		} catch (error) {
+			setError('Ошибка сохранения теста!');
+		}
+	};
+
 	return (
-		<div className={styles.container}>
+		<div className={styles.containerHeader}>
 			<h3>Редактирование</h3>
 			<h3>{title}</h3>
-			<form onSubmit={() => {}} className={styles.form}>
-				{questions.map((question, index) => (
-					<Collapsible title={`Вопрос №${index + 1}`}></Collapsible>
-				))}
+			<form className={styles.form} onSubmit={handleSaveTest}>
+				<QuestionList
+					questions={questions}
+					onUpdateQuestion={handleUpdateQuestion}
+				/>
 				<div className={styles.buttons}>
 					<Button
 						height="40px"
-						width="250px"
+						width="320px"
 						margin="0"
 						hoverColor="#FFD700"
 						onClick={handleBack}
@@ -52,7 +76,7 @@ export const TestEdit = ({ tests }) => {
 					<Button
 						type="submit"
 						height="40px"
-						width="250px"
+						width="320px"
 						hoverColor="#98FB98"
 					>
 						Сохранить
@@ -62,88 +86,3 @@ export const TestEdit = ({ tests }) => {
 		</div>
 	);
 };
-
-{
-	/*{test.questions.map((question, index) => (*/
-}
-{
-	/*	<div key={index}>*/
-}
-{
-	/*		<label>Вопрос №{index + 1}:</label>*/
-}
-{
-	/*		<input*/
-}
-{
-	/*			type="text"*/
-}
-{
-	/*			name="question"*/
-}
-{
-	/*			value={question.question}*/
-}
-{
-	/*			onChange={() => {}}*/
-}
-{
-	/*		/>*/
-}
-{
-	/*		<label>Варианты ответов:</label>*/
-}
-{
-	/*		{question.options.map((option, optIndex) => (*/
-}
-{
-	/*			<input*/
-}
-{
-	/*				key={optIndex}*/
-}
-{
-	/*				type="text"*/
-}
-{
-	/*				name={`option${optIndex}`}*/
-}
-{
-	/*				value={option}*/
-}
-{
-	/*				onChange={() => {}}*/
-}
-{
-	/*			/>*/
-}
-{
-	/*		))}*/
-}
-{
-	/*		<label>Правильный ответ:</label>*/
-}
-{
-	/*		<input*/
-}
-{
-	/*			type="text"*/
-}
-{
-	/*			name="correctAnswer"*/
-}
-{
-	/*			value={question.correctAnswer}*/
-}
-{
-	/*			onChange={() => {}}*/
-}
-{
-	/*		/>*/
-}
-{
-	/*	</div>*/
-}
-{
-	/*))}*/
-}

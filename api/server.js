@@ -1,10 +1,10 @@
 const express = require('express');
 const chalk = require('chalk');
 const mongoose = require('mongoose');
-const { getTests } = require('./controllers/tests.controllers');
+const { getTests, updateTest } = require('./controllers/tests.controllers');
 
-const PORT = 3000;
 const app = express();
+const PORT = 3000;
 
 app.use(express.json());
 
@@ -20,6 +20,18 @@ app.get('/api/tests', async (req, res) => {
 		res.status(200).json(tests);
 	} catch (error) {
 		res.status(500).json({ message: 'Error fetching tests', error });
+	}
+});
+
+app.put('/api/tests/:id', async (req, res) => {
+	const { id } = req.params;
+	const updatedTest = req.body;
+
+	try {
+		const test = await updateTest(id, updatedTest);
+		res.json(test);
+	} catch (error) {
+		res.status(500).json({ message: 'Error updating test', error });
 	}
 });
 
