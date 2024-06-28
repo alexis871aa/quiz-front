@@ -2,6 +2,7 @@ const express = require('express');
 const chalk = require('chalk');
 const mongoose = require('mongoose');
 const { getTests, updateTest } = require('./controllers/tests.controllers');
+const { transformTest } = require('./utils/transformTest');
 
 const app = express();
 const PORT = 3000;
@@ -26,9 +27,10 @@ app.get('/api/tests', async (req, res) => {
 app.put('/api/tests/:id', async (req, res) => {
 	const { id } = req.params;
 	const updatedTest = req.body;
+	const transformedTest = transformTest(updatedTest);
 
 	try {
-		const test = await updateTest(id, updatedTest);
+		const test = await updateTest(id, transformedTest);
 		res.json(test);
 	} catch (error) {
 		res.status(500).json({ message: 'Error updating test', error });

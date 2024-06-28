@@ -18,6 +18,10 @@ export const Question = ({ question, isOpen, onUpdateQuestion }) => {
 
 	const handleDeleteOption = (index) => {
 		const updatedOptions = options.filter((_, i) => i !== index);
+		if (options[index] === correctAnswer) {
+			alert('Прежде чем удалять выберите другой правильный ответ');
+			return;
+		}
 		setOptions(updatedOptions);
 		onUpdateQuestion({ ...question, options: updatedOptions });
 	};
@@ -36,10 +40,10 @@ export const Question = ({ question, isOpen, onUpdateQuestion }) => {
 
 		saveTimeout.current = setTimeout(() => {
 			onUpdateQuestion({ ...question, question: target.value });
-		}, 2000);
+		}, 1500);
 	};
 
-	const handleOptionChange = (index, value) => {
+	const handleOptionChange = (index, value, option) => {
 		const updatedOptionTexts = [...optionTexts];
 		updatedOptionTexts[index] = value;
 		setOptionTexts(updatedOptionTexts);
@@ -52,9 +56,15 @@ export const Question = ({ question, isOpen, onUpdateQuestion }) => {
 			const updatedOptions = [...options];
 			updatedOptions[index] = value;
 			setOptions(updatedOptions);
-
-			onUpdateQuestion({ ...question, options: updatedOptions });
-		}, 2000);
+			if (correctAnswer === option) {
+				setCorrectAnswer(updatedOptions[index]);
+			}
+			onUpdateQuestion({
+				...question,
+				options: updatedOptions,
+				correctAnswer: updatedOptions[index],
+			});
+		}, 1500);
 	};
 
 	const handleAddOption = (event) => {
@@ -107,7 +117,9 @@ export const Question = ({ question, isOpen, onUpdateQuestion }) => {
 					<textarea
 						className={styles.option}
 						value={optionTexts[index]}
-						onChange={({ target }) => handleOptionChange(index, target.value)}
+						onChange={({ target }) =>
+							handleOptionChange(index, target.value, option)
+						}
 					/>
 					<div className={styles.rightControl}>
 						<div>

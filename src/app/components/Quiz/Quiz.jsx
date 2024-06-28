@@ -23,20 +23,12 @@ export const Quiz = () => {
 	}, []);
 
 	const handleSaveTest = async (updatedTest) => {
-		console.log('QUIZ - updatedTest DO', updatedTest);
 		try {
-			const transformedTest = {
-				...updatedTest,
-				correct_answer: updatedTest.correctAnswer,
-			};
-
-			console.log('QUIZ - transformedTest POSLE', transformedTest);
-
 			const response = await axios.put(`/api/tests/${updatedTest.id}`, updatedTest);
 
 			setTests((prevTests) =>
 				prevTests.map((test) =>
-					test.id === updatedTest.id ? response.data : test,
+					test.id === updatedTest.id ? transformTests(response.data) : test,
 				),
 			);
 		} catch (error) {

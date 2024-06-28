@@ -3,24 +3,30 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Button, QuestionList } from '../../shared/components';
 import styles from './TestEdit.module.css';
+import { transformTests } from '../../shared/lib/transformers';
 
 export const TestEdit = ({ tests, onSaveTest }) => {
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const [test, setTest] = useState({});
+	const initialTest = tests.find((test) => test.id === id) || null;
+	const [test, setTest] = useState(initialTest);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
 
 	useEffect(() => {
-		const foundTest = tests.find((test) => test.id === id);
+		if (!initialTest) {
+			const foundTest = tests.find((test) => test.id === id);
 
-		if (!foundTest) {
-			navigate('/test/not-found');
+			if (!foundTest) {
+				navigate('/test/not-found');
+			} else {
+				setTest(foundTest);
+				setLoading(false);
+			}
 		} else {
-			setTest(foundTest);
 			setLoading(false);
 		}
-	}, [id, tests, navigate]);
+	}, [id, tests, navigate, initialTest]);
 
 	if (loading) return <div>Загрузка...</div>;
 	if (error) return <div>Error: {error}</div>;
@@ -44,22 +50,7 @@ export const TestEdit = ({ tests, onSaveTest }) => {
 		event.preventDefault();
 
 		try {
-			const transformedTest = ({ id, title, questions }) => ({
-				_id: id,
-				title,
-				questions: questions.map(({ id, question, options, correctAnswers }) => ({
-					_id: id,
-					question,
-					options,
-					correct_answer: correctAnswers,
-				})),
-			});
-
-			console.log('TEST EDIT - transformedTest, до запроса', transformedTest(test));
-			const response = await axios.put(`/api/tests/${id}`, transformedTest(test));
-			console.log('TEST EDIT - response после запроса', response.data);
-
-			onSaveTest(response.data);
+			await onSaveTest(test);
 			navigate('/');
 		} catch (error) {
 			console.log(error);
